@@ -1,0 +1,16 @@
+/* src/HomePage.css */
+.home-page {
+    padding: 50px;
+    text-align: center;
+  }
+  
+  .home-page h1 {
+    font-size: 36px;
+    color: #333;
+  }
+  
+  .home-page p {
+    font-size: 18px;
+    color: #555;
+  }
+  
