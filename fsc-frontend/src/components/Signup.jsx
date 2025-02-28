@@ -2,34 +2,46 @@ import React, { useState } from 'react';
 import './Signup.css';
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
+  const [farmerData, setFarmerData] = useState({
     fullName: '',
     email: '',
     password: '',
     mobile: '',
-    role: 'farmer' // Default role
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const [customerData, setCustomerData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    mobile: '',
+  });
+
+  const handleChange = (e, role) => {
+    if (role === 'farmer') {
+      setFarmerData({ ...farmerData, [e.target.name]: e.target.value });
+    } else {
+      setCustomerData({ ...customerData, [e.target.name]: e.target.value });
+    }
   };
 
-  const handleRoleChange = (role) => {
-    setFormData({ ...formData, role });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, role) => {
     e.preventDefault();
+    const formToSend = role === 'farmer' ? farmerData : customerData;
 
     try {
-      const response = await fetch('http://localhost:5000/register', {
+      const response = await fetch('http://localhost:5000/api/register', { // ✅ Corrected endpoint
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formToSend, role }),
       });
 
       if (response.ok) {
-        alert('Signup successful! You can now log in.');
+        alert(`Signup successful as ${role}! You can now log in.`);
+        if (role === 'farmer') {
+          setFarmerData({ fullName: '', email: '', password: '', mobile: '' });
+        } else {
+          setCustomerData({ fullName: '', email: '', password: '', mobile: '' });
+        }
       } else {
         const result = await response.json();
         alert(result.error || 'Signup failed');
@@ -43,27 +55,23 @@ const Signup = () => {
     <div className="signup-container">
       <div className="signup-form left">
         <h2>Farmer Signup</h2>
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} required />
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-          <input type="text" name="mobile" placeholder="Mobile Number" onChange={handleChange} required />
-          <button type="submit" className="btn" onClick={() => handleRoleChange('farmer')}>
-            Signup as Farmer
-          </button>
+        <form onSubmit={(e) => handleSubmit(e, 'farmer')}>
+          <input type="text" name="fullName" placeholder="Full Name" value={farmerData.fullName} onChange={(e) => handleChange(e, 'farmer')} required />
+          <input type="email" name="email" placeholder="Email" value={farmerData.email} onChange={(e) => handleChange(e, 'farmer')} required />
+          <input type="password" name="password" placeholder="Password" value={farmerData.password} onChange={(e) => handleChange(e, 'farmer')} required />
+          <input type="text" name="mobile" placeholder="Mobile Number" value={farmerData.mobile} onChange={(e) => handleChange(e, 'farmer')} required />
+          <button type="submit" className="btn">Signup as Farmer</button>
         </form>
       </div>
 
       <div className="signup-form right">
         <h2>Customer Signup</h2>
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="fullName" placeholder="Full Name" onChange={handleChange} required />
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-          <input type="text" name="mobile" placeholder="Mobile Number" onChange={handleChange} required />
-          <button type="submit" className="btn" onClick={() => handleRoleChange('customer')}>
-            Signup as Customer
-          </button>
+        <form onSubmit={(e) => handleSubmit(e, 'customer')}>
+          <input type="text" name="fullName" placeholder="Full Name" value={customerData.fullName} onChange={(e) => handleChange(e, 'customer')} required />
+          <input type="email" name="email" placeholder="Email" value={customerData.email} onChange={(e) => handleChange(e, 'customer')} required />
+          <input type="password" name="password" placeholder="Password" value={customerData.password} onChange={(e) => handleChange(e, 'customer')} required />
+          <input type="text" name="mobile" placeholder="Mobile Number" value={customerData.mobile} onChange={(e) => handleChange(e, 'customer')} required />
+          <button type="submit" className="btn">Signup as Customer</button>
         </form>
       </div>
     </div>
