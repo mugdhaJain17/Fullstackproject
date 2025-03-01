@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const Login = ({ onClose, onLoginSuccess }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const loginFormRef = useRef(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -13,17 +12,19 @@ const Login = ({ onClose, onLoginSuccess }) => {
     const password = e.target.password.value;
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        onLoginSuccess(); // Notify parent component
-        navigate('/profile');
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        console.log("✅ Login successful, redirecting to profile...");
+        navigate('/profile');  // ✅ This should trigger the redirect
       } else {
         const result = await response.json();
         setError(result.error || 'Invalid email or password');
@@ -41,7 +42,7 @@ const Login = ({ onClose, onLoginSuccess }) => {
 
         {error && <p className="error">{error}</p>}
 
-        <form ref={loginFormRef} onSubmit={handleLogin}>
+        <form onSubmit={handleLogin}>
           <input type="email" name="email" placeholder="Email" required />
           <input type="password" name="password" placeholder="Password" required />
           <button type="submit" className="submit-btn">Login</button>
@@ -52,4 +53,3 @@ const Login = ({ onClose, onLoginSuccess }) => {
 };
 
 export default Login;
-
