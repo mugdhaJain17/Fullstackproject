@@ -1,78 +1,98 @@
-// src/HomePage.js
-import React from 'react';
-import './Home.css'
+import React, { useEffect, useState } from 'react';
+import HomeImage from '../assets/HomeImage.png';
+import './Home.css';
 
 const HomePage = () => {
+  const [products, setProducts] = useState([]);
+
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/products"); // Update with your API URL
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="home-page">
-      <h1>Welcome to Your Website</h1>
-      <p>This is the homepage where you can add introductory content, featured sections, and more.</p>
+      {/* Hero Section */}
+      <div className="hero-section">
+        <img src={HomeImage} alt="Hero Image" className="hero-image" />
+      </div>
+
+      {/* Header Section */}
+      <div className="home-header">
+        <p className="intro-text">Your one-stop shop for fresh, locally sourced products.</p>
+      </div>
+
+      {/* Products Section */}
+      <div className="products-section">
+        <h2>Featured Products</h2>
+        <div className="product-list">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <div key={product.id} className="product-card">
+                <img src={`http://localhost:5000/uploads/${product.img_path}`} alt={product.prod_name} className="product-image" />
+                <h3>{product.prod_name}</h3>
+                <p className="product-price">₹{product.prod_price}</p>
+                <p>{product.prod_desc}</p>
+                <button className="buy-btn">Buy Now</button>
+              </div>
+            ))
+          ) : (
+            <p>No products available.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <footer className="footer">
+        <div className="footer-container">
+          {/* Quick Links */}
+          <div className="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/products">Shop</a></li>
+              <li><a href="/about">About Us</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div className="footer-section">
+            <h3>Contact Us</h3>
+            <p>Email: <a href="mailto:support@localfarmers.com">support@localfarmers.com</a></p>
+            <p>Phone: +91 94635 63971</p>
+            <p>Address: 123 Farmer's Street, Agri Town, India</p>
+          </div>
+
+          <div className="footer-section">
+          <h3>Follow Us</h3>
+          <div className="social-icons">
+            <a href="https://www.facebook.com/" target='blank'><i className="fa-brands fa-facebook"></i></a>
+            <a href="https://www.instagram.com/" target='blank'><i className="fa-brands fa-instagram"></i></a>
+            <a href="https://x.com/" target='blank'><i className="fa-brands fa-twitter"></i></a>
+            <a href="https://in.linkedin.com/" target='blank'><i className="fa-brands fa-linkedin"></i></a>
+          </div>
+        </div>
+
+        </div>
+
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} Local Farmers' Market. All rights reserved.</p>
+        </div>
+      </footer>
+
     </div>
   );
 };
 
 export default HomePage;
-
-
-// const express = require("express");
-// const mongoose = require("mongoose");
-// const bodyParser = require("body-parser");
-// const cors = require("cors");
-
-// const app = express();
-// app.use(bodyParser.json());
-// app.use(cors());
-
-// // Connect to MongoDB
-// mongoose.connect("mongodb://localhost:27017/productsDB", {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-
-// // Product Schema
-// const productSchema = new mongoose.Schema({
-//   name: String,
-//   price: Number,
-//   category: String,
-//   description: String,
-// });
-
-// const Product = mongoose.model("Product", productSchema);
-
-// // 1. Create a Product
-// app.post("/api/products", async (req, res) => {
-//   const product = new Product(req.body);
-//   await product.save();
-//   res.json({ message: "Product added successfully", product });
-// });
-
-// // 2. Get All Products
-// app.get("/api/products", async (req, res) => {
-//   const products = await Product.find();
-//   res.json(products);
-// });
-
-// // 3. Get Product by ID
-// app.get("/api/products/:id", async (req, res) => {
-//   const product = await Product.findById(req.params.id);
-//   if (!product) return res.status(404).json({ error: "Product not found" });
-//   res.json(product);
-// });
-
-// // 4. Update a Product
-// app.put("/api/products/:id", async (req, res) => {
-//   const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-//     new: true,
-//   });
-//   res.json({ message: "Product updated successfully", product });
-// });
-
-// // 5. Delete a Product
-// app.delete("/api/products/:id", async (req, res) => {
-//   await Product.findByIdAndDelete(req.params.id);
-//   res.json({ message: "Product deleted successfully" });
-// });
-
-// // Start Server
-// const PORT = 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,13 +1,13 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const pool = require("../connection"); // Use pool with promise-based queries
+const pool = require("../connection");
 const jwt = require("jsonwebtoken");
 
 const router = express.Router();
-const JWT_SECRET = "yoursupersecretkey";
+const secretKey = "secretkey";
 
 
-// User Registration Route
+// sign up api
 router.post("/register", async (req, res) => {
     const { fullName, email, password, mobile, role } = req.body;
 
@@ -21,12 +21,10 @@ router.post("/register", async (req, res) => {
             return res.status(400).json({ error: "Email already registered!" });
         }
 
-        // Hash password securely
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Extract first and last name from fullName
         const [firstName, ...lastNameParts] = fullName.split(" ");
-        const lastName = lastNameParts.join(" ") || ""; // Handle single-word names
+        const lastName = lastNameParts.join(" ") || ""; 
 
         const insertUserQuery = "INSERT INTO Users (first_name, last_name, email, password, mobile, role) VALUES (?, ?, ?, ?, ?, ?)";
         await pool.query(insertUserQuery, [firstName, lastName, email, hashedPassword, mobile, role]);
@@ -39,7 +37,7 @@ router.post("/register", async (req, res) => {
 });
 
 
-// 🛠 User Login Route
+//Login api
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -48,21 +46,19 @@ router.post("/login", async (req, res) => {
     }
 
     try {
-        console.log("🔍 Checking user in DB for email:", email); // Debug log
+        console.log("🔍 Checking user in DB for email:", email);
 
-        // Fetch user from database
         const [users] = await pool.query("SELECT * FROM Users WHERE email = ?", [email]);
 
         if (users.length === 0) {
-            console.log("❌ User not found for email:", email); // Debug log
+            console.log("User not found for email:", email);
             return res.status(400).json({ error: "Invalid email or password" });
         }
 
         const user = users[0];
 
-        console.log("✅ User found:", user); // Debug log
+        console.log("User found:", user);
 
-        // Compare hashed password
         if (!user.password) {
             return res.status(500).json({ error: "User password is missing in DB" });
         }
@@ -70,20 +66,19 @@ router.post("/login", async (req, res) => {
         
         
         if (!isMatch) {
-            console.log("❌ Password does not match for email:", email); // Debug log
+            console.log("Password does not match for email:", email);
             return res.status(400).json({ error: "Invalid email or password" });
         }
 
-        console.log("🔑 Password matched, generating JWT token..."); // Debug log
+        console.log("Password matched, generating JWT token...");
 
-        // Generate JWT token
         const token = jwt.sign(
             { id: user.id, email: user.email, role: user.role },
-            JWT_SECRET,
+            secretKey,
             { expiresIn: "1h" }
         );
 
-        console.log("✅ Login successful for:", email); // Debug log
+        console.log("Login successful for:", email); 
 
         res.status(200).json({
             message: "Login successful!",
@@ -92,9 +87,28 @@ router.post("/login", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("❌ Error in /login route:", error);
+        console.error("Error in /login route:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
 
+router.post("/contact", async (req, res) => {
+    try {
+        const { name, email, message } = req.body;
+
+        // Validate input
+        if (!name || !email || !message) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        // Insert data into MySQL
+        const sql = "INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)";
+        const [result] = await pool.execute(sql, [name, email, message]);
+
+        res.status(201).json({ message: "Message saved successfully!", insertedId: result.insertId });
+    } catch (error) {
+        console.error("❌ Error inserting contact message:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 module.exports = router;

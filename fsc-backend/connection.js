@@ -10,15 +10,14 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Check Database Connection
 pool.getConnection((err, connection) => {
     if (err) {
-        console.error("❌ Error in DB connection:", JSON.stringify(err));
-        process.exit(1); // Exit process if DB connection fails
+        console.error("Error in DB connection:", JSON.stringify(err));
+        process.exit(1);
     } else {
-        console.log("✅ Database connected successfully!");
-        connection.release(); // Release the connection back to the pool
+        console.log("Database connected successfully!");
+        connection.release();
     }
 });
 
-module.exports = pool.promise(); // Use async/await for queries
+module.exports = pool.promise();

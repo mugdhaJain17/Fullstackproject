@@ -1,5 +1,6 @@
 // src/pages/ContactPage.js
 import React, { useState } from 'react';
+import axios from "axios";
 import './ContactPage.css';
 
 const ContactPage = () => {
@@ -8,7 +9,7 @@ const ContactPage = () => {
     email: '',
     message: ''
   });
-
+  const [responseMessage, setResponseMessage] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -17,9 +18,16 @@ const ContactPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    try {
+      const res = await axios.post("http://localhost:5000/api/contact", formData);
+      setResponseMessage(res.data.message);
+      setFormData({ name: "", email: "", message: "" }); // Clear form
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setResponseMessage("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -68,4 +76,3 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
-

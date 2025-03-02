@@ -1,8 +1,7 @@
-const express = require("express");
-const pool = require("../connection");
-const multer = require("multer");
-const path = require("path");
-
+const express = require('express');
+const pool = require('../connection');  // Assuming connection to MySQL is set up correctly
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
 
 // Multer configuration for file uploads
@@ -52,6 +51,25 @@ router.post("/add-product", upload.single("image"), async (req, res) => {
     } catch (error) {
         console.error("Error in /add-product:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Endpoint to fetch all products
+router.get('/products', async (req, res) => {
+    try {
+        const query = `
+            SELECT mp.prod_name, mp.prod_price, mp.prod_desc, pi.img_path, mp.prod_stock
+            FROM master_product mp
+            JOIN product_image pi ON mp.id = pi.product_id
+            WHERE pi.is_enable = 'true';
+        `;
+        const [rows] = await pool.query(query);  // Query the products from the database
+
+        // Send the list of products as a response
+        res.json(rows);
+    } catch (err) {
+        console.error('Error fetching products:', err);
+        res.status(500).json({ message: 'Server error, unable to fetch products.' });
     }
 });
 
