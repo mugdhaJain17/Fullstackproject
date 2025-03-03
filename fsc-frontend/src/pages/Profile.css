@@ -40,7 +40,8 @@
 }
 
 .add-product-btn:hover {
-  background-color: #45a049;
+  text-decoration: none;
+  background-color: #366938;
 }
 
 .products-container {

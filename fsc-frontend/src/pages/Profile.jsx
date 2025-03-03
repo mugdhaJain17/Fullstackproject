@@ -37,7 +37,7 @@ const Profile = () => {
           <div className="profile-info">
             <p><strong>Name:</strong> {user.name}</p>
             <p><strong>Email:</strong> {user.email}</p>
-            <Link to="/add-product" className="add-product-btn">➕ Add Product</Link> 
+            <Link to="/add-product" className="add-product-btn">+ Add Product</Link> 
           </div>
         ) : (
           <p>No user data found. Please log in.</p>
