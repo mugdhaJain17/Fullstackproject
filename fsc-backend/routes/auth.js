@@ -96,19 +96,17 @@ router.post("/contact", async (req, res) => {
     try {
         const { name, email, message } = req.body;
 
-        // Validate input
         if (!name || !email || !message) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
-        // Insert data into MySQL
         const sql = "INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)";
         const [result] = await pool.execute(sql, [name, email, message]);
 
         res.status(201).json({ message: "Message saved successfully!", insertedId: result.insertId });
     } catch (error) {
-        console.error("❌ Error inserting contact message:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error("Error inserting contact message:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 module.exports = router;

@@ -1,41 +1,6 @@
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import "./Profile.css"; // ✅ Import the new CSS
-
-// const Profile = () => {
-//   const [user, setUser] = useState(null);
-
-//   useEffect(() => {
-//     const storedUser = JSON.parse(localStorage.getItem("user"));
-//     if (storedUser) {
-//       setUser(storedUser);
-//     }
-//   }, []);
-
-//   return (
-//     <div className="profile-container">
-//       <div className="profile-card">
-//         <h1>Your Profile</h1>
-//         {user ? (
-//           <div className="profile-info">
-//             <p><strong>Name:</strong> {user.name}</p>
-//             <p><strong>Email:</strong> {user.email}</p>
-//             <Link to="/add-product" className="add-product-btn">➕ Add Product</Link> 
-//           </div>
-//         ) : (
-//           <p>No user data found. Please log in.</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Profile;
-
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./Profile.css"; // ✅ Import the new CSS
+import "./Profile.css";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -46,7 +11,7 @@ const Profile = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setUser(storedUser);
-      fetchProducts(storedUser.id); // Pass user ID to fetch products
+      fetchProducts(storedUser.id);
     }
   }, []);
 
@@ -55,7 +20,7 @@ const Profile = () => {
       const response = await fetch(`http://localhost:5000/api/products`);
       if (response.ok) {
         const data = await response.json();
-        setProducts(data);  // Set products data in the state
+        setProducts(data);
       } else {
         setError("Failed to fetch products.");
       }

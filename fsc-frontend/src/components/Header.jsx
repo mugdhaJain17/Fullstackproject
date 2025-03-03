@@ -47,7 +47,6 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Render Login Modal */}
       {showLogin && <Login onClose={() => setShowLogin(false)} onLoginSuccess={() => setIsAuthenticated(true)} />}
     </>
   );

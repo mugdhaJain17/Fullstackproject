@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import HomeImage from '../assets/HomeImage.png';
+// import HomeImage from '../assets/HomeImage.png';
+import HomeImage from "../assets/about.png";
 import './Home.css';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
-
-  // Fetch products from backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/products"); // Update with your API URL
+        const response = await fetch("http://localhost:5000/api/products");
         const data = await response.json();
         setProducts(data);
       } catch (error) {
@@ -22,17 +21,14 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      {/* Hero Section */}
       <div className="hero-section">
         <img src={HomeImage} alt="Hero Image" className="hero-image" />
       </div>
 
-      {/* Header Section */}
       <div className="home-header">
         <p className="intro-text">Your one-stop shop for fresh, locally sourced products.</p>
       </div>
 
-      {/* Products Section */}
       <div className="products-section">
         <h2>Featured Products</h2>
         <div className="product-list">
@@ -52,10 +48,8 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Footer Section */}
       <footer className="footer">
         <div className="footer-container">
-          {/* Quick Links */}
           <div className="footer-section">
             <h3>Quick Links</h3>
             <ul>
@@ -66,7 +60,6 @@ const HomePage = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div className="footer-section">
             <h3>Contact Us</h3>
             <p>Email: <a href="mailto:support@localfarmers.com">support@localfarmers.com</a></p>

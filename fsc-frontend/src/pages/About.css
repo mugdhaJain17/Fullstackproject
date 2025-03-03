@@ -1,10 +1,8 @@
-/* About Page Styles */
 .about-page {
     font-family: Arial, sans-serif;
     color: #333;
   }
-  
-  /* Hero Section */
+
   .about-hero {
     position: relative;
     width: 100%;
@@ -36,7 +34,6 @@
     font-size: 1.2rem;
   }
   
-  /* About Content */
   .about-content {
     max-width: 900px;
     margin: 40px auto;
@@ -57,7 +54,6 @@
     margin-bottom: 30px;
   }
   
-  /* Team Section */
   .team {
     display: flex;
     justify-content: center;
@@ -95,7 +91,6 @@
     color: #777;
   }
   
-  /* Footer */
   .about-footer {
     background-color: #2c3e50;
     color: white;

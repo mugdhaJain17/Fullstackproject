@@ -1,4 +1,3 @@
-// src/pages/ContactPage.js
 import React, { useState } from 'react';
 import axios from "axios";
 import './ContactPage.css';
@@ -23,7 +22,7 @@ const ContactPage = () => {
     try {
       const res = await axios.post("http://localhost:5000/api/contact", formData);
       setResponseMessage(res.data.message);
-      setFormData({ name: "", email: "", message: "" }); // Clear form
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error submitting form:", error);
       setResponseMessage("Something went wrong. Please try again.");

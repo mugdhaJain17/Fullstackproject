@@ -25,7 +25,7 @@ const Login = ({ onClose, onLoginSuccess }) => {
 
         console.log("Login successful, redirecting to profile...");
         onLoginSuccess();
-        navigate('/profile');  // Redirect to profile page
+        navigate('/profile');
       } else {
         const result = await response.json();
         setError(result.error || 'Invalid email or password');

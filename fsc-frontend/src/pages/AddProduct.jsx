@@ -5,7 +5,7 @@ const AddProduct = () => {
     name: "",
     price: "",
     description: "",
-    stock: "", // Added prod_stock field
+    stock: "",
     image: null,
   });
 
@@ -20,15 +20,13 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // FormData to send text + image
     const formData = new FormData();
     formData.append("prod_name", product.name);
     formData.append("prod_price", product.price);
     formData.append("prod_desc", product.description);
-    formData.append("user_id", "1"); // Replace with actual user_id
-    formData.append("prod_stock", product.stock); // Use user input for stock
-    formData.append("image", product.image); // Image file
+    formData.append("user_id", "1");
+    formData.append("prod_stock", product.stock);
+    formData.append("image", product.image);
 
     try {
       const response = await fetch("http://localhost:5000/api/add-product", {
@@ -79,7 +77,7 @@ const AddProduct = () => {
           required
         ></textarea>
 
-        <label>Stock:</label> {/* Added prod_stock input field */}
+        <label>Stock:</label>
         <input
           type="number"
           name="stock"

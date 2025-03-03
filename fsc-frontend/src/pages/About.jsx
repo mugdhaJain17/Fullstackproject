@@ -5,7 +5,6 @@ import AboutImage from "../assets/about.png";
 const About = () => {
   return (
     <div className="about-page">
-      {/* Hero Section */}
       <div className="about-hero">
         <img src={AboutImage} alt="About Us" className="about-image" />
         <div className="overlay-text">
@@ -14,7 +13,7 @@ const About = () => {
         </div>
       </div>
 
-      {/* About Content */}
+      
       <div className="about-content">
         <h2>Who We Are</h2>
         <p>
@@ -54,7 +53,6 @@ const About = () => {
         </div>
       </div>
 
-      {/* Footer */}
       <footer className="about-footer">
         <p>© {new Date().getFullYear()} Local Farmers' Market. All rights reserved.</p>
       </footer>
