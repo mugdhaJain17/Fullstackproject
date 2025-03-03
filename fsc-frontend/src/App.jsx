@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './pages/Home';
@@ -9,26 +9,16 @@ import Login from './components/Login';
 import Profile from './pages/Profile';
 import AddProduct from './pages/AddProduct';
 
-const isAuthenticated = () => {
-  return localStorage.getItem("token") !== null;
-};
-
 function App() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setIsAuthenticated(localStorage.getItem("token") !== null);
+  }, []);
 
   return (
     <Router>
-      <Header onLoginOpen={() => setIsLoginOpen(true)} />
-      
-      {isLoginOpen && (
-        <Login 
-          onClose={() => setIsLoginOpen(false)}
-          onLoginSuccess={() => {
-            setIsLoginOpen(false);
-            window.location.reload();
-          }}
-        />
-      )}
+      <Header />
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -38,11 +28,11 @@ function App() {
         <Route path="/add-product" element={<AddProduct />} />
         <Route 
           path="/profile" 
-          element={isAuthenticated() ? <Profile /> : <Navigate to="/login" />} 
+          element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} 
         />
         <Route 
           path="/login" 
-          element={isAuthenticated() ? <Navigate to="/profile" /> : <Login onLoginSuccess={() => window.location.reload()} />}
+          element={isAuthenticated ? <Navigate to="/profile" /> : <Login onLoginSuccess={() => setIsAuthenticated(true)} />}
         />
       </Routes>
     </Router>

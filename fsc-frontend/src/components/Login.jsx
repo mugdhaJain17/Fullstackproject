@@ -23,7 +23,6 @@ const Login = ({ onClose, onLoginSuccess }) => {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
 
-        console.log("Login successful, redirecting to profile...");
         onLoginSuccess();
         navigate('/profile');
       } else {
