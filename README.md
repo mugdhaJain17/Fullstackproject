@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/f099a3c2-3d48-43c4-a745-fa6515e56ce1)AgroMart is a full-stack web application designed to connect local farmers directly with consumers. It provides a marketplace where farmers can register, list their products, and sell directly to buyers, eliminating the need for middlemen.
+AgroMart is a full-stack web application designed to connect local farmers directly with consumers. It provides a marketplace where farmers can register, list their products, and sell directly to buyers, eliminating the need for middlemen.
 
 Features:
   For Farmers
