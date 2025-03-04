@@ -3,7 +3,7 @@ const cors = require("cors");
 const connection = require("./connection");
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/product");
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const app = express();
 
 app.use('/uploads', express.static('uploads'));
